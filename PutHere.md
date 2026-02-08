@@ -53,6 +53,7 @@ graph LR
     D{十一M-哈士奇:原始股东/雪橇犬选美2nd/头狗} -- 被骑 by -->AH{阿拉斯加M-阿拉斯加}
     AI{大十一M-哈士奇:细小+冠状} ---> B[大哈M-真·头狗:董事长]
     D{十一M-哈士奇:原始股东/雪橇犬选美2nd/头狗} -- 骑/除叶子外非骨科正常初恋/绝育后 -->AJ{拉布拉多F-拉布拉多}
+    D{十一M-哈士奇:原始股东/雪橇犬选美2nd/头狗} -- 骑 -->AC{拉拉F-拉布拉多:吃货大赛冠军}
 style I stroke-dasharray: 5 5
 style K stroke-dasharray: 5 5
 style L stroke-dasharray: 5 5
@@ -61,5 +62,5 @@ style AB stroke-dasharray: 5 5
 style AI stroke-dasharray: 5 5
 style P stroke-width: 10
 style B stroke-width: 10
-%% 关系全景图 V2.0 传播/修改本源码需遵守MIT协议
+%% 关系全景图 V2.2 传播/修改本源码需遵守MIT协议
 ```

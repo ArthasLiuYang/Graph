@@ -57,6 +57,8 @@ graph LR
     D{十一M-哈士奇:原始股东/雪橇犬选美2nd/头狗} -- 骑 -->AC{拉拉F-拉布拉多:吃货大赛冠军}
     D{十一M-哈士奇:原始股东/雪橇犬选美2nd/头狗} -- 打 -->AC{拉拉F-拉布拉多:吃货大赛冠军}
     E{叶子F-边牧:原始股东/狗管理} -- 打 -->AC{拉拉F-拉布拉多:吃货大赛冠军}
+    O{王子M-伯恩山:原始股东}-- 喜欢 -->AD{转转M-柴犬:转转代言人}
+    AD{转转M-柴犬:转转代言人}-- 凶 -->O{王子M-伯恩山:原始股东}
 style I stroke-dasharray: 5 5
 style K stroke-dasharray: 5 5
 style L stroke-dasharray: 5 5

@@ -1,9 +1,9 @@
-
 import re
 import os
 from PIL import Image, ImageDraw, ImageFont
 import subprocess
 import glob
+import shutil
 
 # Configuration
 RELATIONS_FILE = 'Relations.md'
@@ -237,7 +237,13 @@ def find_bgm():
                 return os.path.join(music_dir, file)
     return None
 
+def clear_frames_folder():
+    if os.path.exists(FRAMES_DIR):
+        shutil.rmtree(FRAMES_DIR)
+        os.makedirs(FRAMES_DIR)
+
 def main():
+    clear_frames_folder()
     if not os.path.exists(FRAMES_DIR):
         os.makedirs(FRAMES_DIR)
         

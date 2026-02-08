@@ -1,3 +1,13 @@
 # Ignore restored files
-RemoveTimeAndLinks.py
-README.TXT
+
+# Ignore cover.png
+cover.png
+
+# Ignore output.mp4
+output.mp4
+
+# Ignore Music folder
+Music/
+
+# Ignore frames folder
+frames/

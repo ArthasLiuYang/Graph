@@ -14,7 +14,7 @@ CANVAS_SIZE = (1920, 1080)
 BG_COLOR = (255, 255, 255)
 TEXT_COLOR = (0, 0, 0)
 AVATAR_MAX_SIZE = (500, 500)
-FRAME_DURATION = 3  # Seconds
+FRAME_DURATION = 4  # Seconds
 
 def get_font(size):
     try:
@@ -239,8 +239,15 @@ def find_bgm():
 
 def clear_frames_folder():
     if os.path.exists(FRAMES_DIR):
-        shutil.rmtree(FRAMES_DIR)
-        os.makedirs(FRAMES_DIR)
+        for file in os.listdir(FRAMES_DIR):
+            file_path = os.path.join(FRAMES_DIR, file)
+            try:
+                if os.path.isfile(file_path) or os.path.islink(file_path):
+                    os.unlink(file_path)  # Remove file or symbolic link
+                elif os.path.isdir(file_path):
+                    shutil.rmtree(file_path)  # Remove subdirectory
+            except Exception as e:
+                print(f"Failed to delete {file_path}. Reason: {e}")
 
 def main():
     clear_frames_folder()

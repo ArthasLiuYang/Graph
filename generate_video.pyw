@@ -191,43 +191,57 @@ def draw_person(img, draw, person, avatar_path, align, name_font, title_font):
     if person['title']:
         draw_text_wrapped(draw, person['title'], title_font, TEXT_COLOR, center_x, text_base_y + 80, col_width - 40)
 
+def create_gradient_background(size, start_color, end_color):
+    """Create a gradient background from start_color to end_color."""
+    width, height = size
+    gradient = Image.new('RGB', size, start_color)
+    draw = ImageDraw.Draw(gradient)
+
+    for y in range(height):
+        r = start_color[0] + (end_color[0] - start_color[0]) * y // height
+        g = start_color[1] + (end_color[1] - start_color[1]) * y // height
+        b = start_color[2] + (end_color[2] - start_color[2]) * y // height
+        draw.line([(0, y), (width, y)], fill=(r, g, b))
+
+    return gradient
+
 def create_frame(idx, rel):
-    img = Image.new('RGB', CANVAS_SIZE, BG_COLOR)
+    # Create gradient background
+    img = create_gradient_background(CANVAS_SIZE, (135, 206, 250), BG_COLOR)  # Sky blue to white gradient
     draw = ImageDraw.Draw(img)
-    
+
     # Font setup
     name_font = get_font(60)
     title_font = get_font(40)
     rel_font = get_font(50)
-    
+
     # --- Left Person ---
     left = rel['left']
     avatar_path1 = find_avatar_path(left['id'], left['name'])
     draw_person(img, draw, left, avatar_path1, align='left', name_font=name_font, title_font=title_font)
-    
+
     # --- Right Person ---
     right = rel['right']
     avatar_path2 = find_avatar_path(right['id'], right['name'])
     draw_person(img, draw, right, avatar_path2, align='right', name_font=name_font, title_font=title_font)
-    
+
     # --- Middle Relation ---
     cx, cy = CANVAS_SIZE[0] // 2, CANVAS_SIZE[1] // 2
     rel_text = rel['relation']
     display_text = f"{rel_text} ->" if rel_text else "->"
-    
+
     # Draw text centered
     bbox = draw.textbbox((0, 0), display_text, font=rel_font)
     text_w = bbox[2] - bbox[0]
     text_h = bbox[3] - bbox[1]
-    
+
     draw.text((cx - text_w // 2, cy - text_h // 2), display_text, font=rel_font, fill=TEXT_COLOR)
-    
+
     # Save
     if not os.path.exists(FRAMES_DIR):
         os.makedirs(FRAMES_DIR)
     img.save(f"{FRAMES_DIR}/frame_{idx:04d}.png")
     print(f"Generated frame {idx}: {left['name']} {display_text} {right['name']}")
-
 
 def find_bgm():
     music_dir = 'Music'

@@ -263,17 +263,34 @@ def clear_frames_folder():
             except Exception as e:
                 print(f"Failed to delete {file_path}. Reason: {e}")
 
+def get_intro_frames():
+    intro_dir = '开头'
+    intro_frames = []
+    if os.path.exists(intro_dir):
+        intro_frames = sorted(
+            [os.path.join(intro_dir, f) for f in os.listdir(intro_dir) if f.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp', '.gif'))]
+        )
+    return intro_frames
+
 def main():
     clear_frames_folder()
     if not os.path.exists(FRAMES_DIR):
         os.makedirs(FRAMES_DIR)
-        
+
     relations = parse_relations(RELATIONS_FILE)
     print(f"Found {len(relations)} relations.")
-    
+
     for i, rel in enumerate(relations):
         create_frame(i, rel)
-    
+
+    # Add intro frames at the end
+    intro_frames = get_intro_frames()
+    for idx, intro_frame in enumerate(intro_frames):
+        img = Image.open(intro_frame)
+        img = img.resize(CANVAS_SIZE, Image.Resampling.LANCZOS)
+        img.save(f"{FRAMES_DIR}/frame_{len(relations) + idx:04d}.png")
+        print(f"Added ending frame {idx}: {intro_frame}")
+
     bgm_path = find_bgm()
     print(f"Background music found: {bgm_path}")
 
@@ -281,32 +298,32 @@ def main():
     # -y overwrite output
     # -framerate 1/3 -> Each image lasts 3 seconds
     # -i frames/frame_%04d.png -> Input pattern
-    # -stream_loop -1 -i bgm -> Loop music
+    # -stream_loop 1 -i bgm -> Loop music once
     # -c:v libx264 -> Video Codec
     # -c:a aac -> Audio Codec
     # -shortest -> Finish when shortest stream (video) ends
-    
+
     cmd = [
         'ffmpeg', '-y',
         '-framerate', f'1/{FRAME_DURATION}',
         '-i', f'{FRAMES_DIR}/frame_%04d.png'
     ]
-    
+
     if bgm_path:
-        # Add looped audio input
-        cmd.extend(['-stream_loop', '-1', '-i', bgm_path])
-    
+        # Add looped audio input (loop once)
+        cmd.extend(['-stream_loop', '1', '-i', bgm_path])
+
     cmd.extend([
         '-c:v', 'libx264',
         '-r', '30',
         '-pix_fmt', 'yuv420p'
     ])
-    
+
     if bgm_path:
         cmd.extend(['-c:a', 'aac', '-shortest'])
-        
+
     cmd.append(OUTPUT_VIDEO)
-    
+
     print("Running FFmpeg: " + " ".join(cmd))
     subprocess.run(cmd, check=True)
     print(f"Video saved to {OUTPUT_VIDEO}")
